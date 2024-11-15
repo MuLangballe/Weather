@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Generated;
 
-import com.example.Choice;
+import com.example.weather.dto.Choice;
 import com.example.weather.*;
 import com.example.weather.dto.Usage;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;

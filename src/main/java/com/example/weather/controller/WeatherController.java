@@ -2,7 +2,7 @@ package com.example.weather.controller;
 
 import com.example.weather.dto.ChatRequest;
 import com.example.weather.dto.ChatResponse;
-import com.example.Choice;
+import com.example.weather.dto.Choice;
 import com.example.weather.dto.Message;
 import com.example.weather.dto.Usage;
 import com.example.weather.model.Forecast;
@@ -28,10 +28,10 @@ public class WeatherController {
     private String openapikey;
 
     private WeatherService weatherService;
-
     private final WebClient webClient;
 
-    public WeatherController(WebClient.Builder webClientBuilder){
+    public WeatherController(WebClient.Builder webClientBuilder, WeatherService weatherService){
+        this.weatherService = weatherService;
         this.webClient = webClientBuilder.baseUrl("https://api.openai.com/v1/chat/completions").build();
     }
 

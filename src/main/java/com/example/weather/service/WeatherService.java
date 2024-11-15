@@ -2,18 +2,16 @@ package com.example.weather.service;
 
 import com.example.weather.model.Forecast;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @Service
 public class WeatherService {
 
-        private static final String API_KEY = System.getenv("APIKEY");
+        @Value("${weather.api.key}")
+        private String apiKey;
 
         private final WebClient webClient;
 
@@ -27,7 +25,7 @@ public class WeatherService {
                     .uri(uriBuilder -> uriBuilder
                             .path("/forecast/daily")
                             .queryParam("city", city)
-                            .queryParam("key", API_KEY)
+                            .queryParam("key", apiKey)
                             .queryParam("days", 3)  // Example to get 3 days forecast
                             .build())
                     .retrieve()

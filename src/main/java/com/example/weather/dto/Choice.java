@@ -1,5 +1,5 @@
 
-package com.example;
+package com.example.weather.dto;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
