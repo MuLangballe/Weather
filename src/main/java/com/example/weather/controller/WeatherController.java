@@ -40,6 +40,59 @@ public class WeatherController {
         return weatherService.getForecast(city);
     }
 
+    @GetMapping("/api/clothing-recommendation/{city}")
+    public Map<String, Object> getClothingRecommendation(@PathVariable String city) {
+        // Retrieve the weather forecast
+        Forecast forecast = weatherService.getForecast(city)
+                .block();
+
+        if (forecast == null || forecast.getData().isEmpty()) {
+            throw new RuntimeException("No forecast data available for the city: " + city);
+        }
+
+        // Extract weather details from the forecast
+        String weatherDescription = forecast.getData().get(0).getWeather().getDescription();
+        double temperature = forecast.getData().get(0).getTemp();
+
+        // Create a request for OpenAI
+        ChatRequest chatRequest = new ChatRequest();
+        chatRequest.setModel("gpt-3.5-turbo");
+        List<Message> messages = new ArrayList<>();
+        messages.add(new Message("system", "You are a helpful assistant."));
+        messages.add(new Message("user", "The weather is described as: " + weatherDescription +
+                " with a temperature of " + temperature + "°C. What clothing would you recommend?"));
+        chatRequest.setMessages(messages);
+        chatRequest.setN(1);
+        chatRequest.setTemperature(1);
+        chatRequest.setMaxTokens(50);
+        chatRequest.setStream(false);
+
+        // Call OpenAI API for clothing suggestions
+        ChatResponse response = webClient.post()
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(h -> h.setBearerAuth(openapikey))
+                .bodyValue(chatRequest)
+                .retrieve()
+                .bodyToMono(ChatResponse.class)
+                .block();
+
+        if (response == null || response.getChoices().isEmpty()) {
+            throw new RuntimeException("No response from OpenAI API.");
+        }
+
+        // Extract the recommendation from response
+        String clothingRecommendation = response.getChoices().get(0).getMessage().getContent();
+
+        // Prepare and return the result
+        Map<String, Object> result = new HashMap<>();
+        result.put("city", city);
+        result.put("weather", weatherDescription);
+        result.put("temperature", temperature);
+        result.put("recommendation", clothingRecommendation);
+
+        return result;
+    }
+
     @GetMapping("/chat")
     public Map<String, Object> chatWithGPT(@RequestParam String message) {
         ChatRequest chatRequest = new ChatRequest(); //ChatRequest objekt har jeg dannet med https://www.jsonschema2pojo.or g/ værktøj
