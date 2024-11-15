@@ -62,7 +62,7 @@ public class WeatherController {
         chatRequest.setMessages(messages);
         chatRequest.setN(1);
         chatRequest.setTemperature(1);
-        chatRequest.setMaxTokens(50);
+        chatRequest.setMaxTokens(100);
         chatRequest.setStream(false);
 
         // Call OpenAI API for clothing suggestions
