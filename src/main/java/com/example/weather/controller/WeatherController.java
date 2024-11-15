@@ -101,7 +101,7 @@ public class WeatherController {
         chatRequest.setMessages(lstMessages);
         chatRequest.setN(3); //n er antal svar fra chatgpt
         chatRequest.setTemperature(1); //jo højere jo mere fantasifuldt svar (se powerpoint)
-        chatRequest.setMaxTokens(30); //længde af svar
+        chatRequest.setMaxTokens(50); //længde af svar
         chatRequest.setStream(false); //stream = true, er for viderekomne, der kommer flere svar asynkront
         chatRequest.setPresencePenalty(1); //noget med ikke at gentage sig. se powerpoint
 

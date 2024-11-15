@@ -26,7 +26,7 @@ public class WeatherService {
                             .path("/forecast/daily")
                             .queryParam("city", city)
                             .queryParam("key", apiKey)
-                            .queryParam("days", 3)  // Example to get 3 days forecast
+                            .queryParam("days", 1)
                             .build())
                     .retrieve()
                     .bodyToMono(Forecast.class);
